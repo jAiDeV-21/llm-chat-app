@@ -1,0 +1,530 @@
+# ============================================================================
+# COMPREHENSIVE .gitignore for Full-Stack Chat Application
+# Covers: Backend (FastAPI), Frontend (React), Ingestion Service, K8s, Docker
+# ============================================================================
+
+# =============================================================================
+# PYTHON - General
+# =============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# =============================================================================
+# PYTHON - Virtual Environments
+# =============================================================================
+venv/
+ENV/
+env/
+.venv
+env.bak/
+venv.bak/
+.env
+.env.local
+.env.*.local
+env_variables
+virtual_env/
+
+# =============================================================================
+# PYTHON - Testing & Coverage
+# =============================================================================
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+*.cover
+*.py,cover
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# =============================================================================
+# PYTHON - IDEs & Editors
+# =============================================================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.project
+.pydevproject
+.settings/
+*.sublime-project
+*.sublime-workspace
+.vim/
+.vimrc
+*.iml
+.netrwhist
+
+# =============================================================================
+# PYTHON - Documentation
+# =============================================================================
+docs/_build/
+site/
+
+# =============================================================================
+# PYTHON - Celery & Task Queues
+# =============================================================================
+celerybeat-schedule
+celerybeat.pid
+
+# =============================================================================
+# PYTHON - Debuggers
+# =============================================================================
+.debugpy/
+.spyproject
+.spyproject/
+
+# =============================================================================
+# PYTHON - Rope
+# =============================================================================
+.ropeproject/
+
+# =============================================================================
+# PYTHON - mypy & Type Checking
+# =============================================================================
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+
+# =============================================================================
+# NODE.js & React (Frontend)
+# =============================================================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+frontend/node_modules/
+frontend/npm-debug.log*
+frontend/build/
+frontend/dist/
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+.cache/
+.parcel-cache/
+dist/
+
+# =============================================================================
+# REACT-Specific
+# =============================================================================
+frontend/.next/
+frontend/out/
+frontend/.eslintcache
+frontend/storybook-static/
+frontend/coverage/
+
+# =============================================================================
+# NPM Lock Files (optional - uncomment if using yarn/pnpm exclusively)
+# =============================================================================
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# =============================================================================
+# DATABASE Files
+# =============================================================================
+*.db
+*.sqlite
+*.sqlite3
+database.db
+chat.db
+inference_logs.db
+data.db
+*.sqlalchemy
+*.sqlalchemy.*
+postgres_data/
+mysql_data/
+mongo_data/
+
+# =============================================================================
+# LOGS
+# =============================================================================
+logs/
+*.log
+app.log
+server.log
+error.log
+access.log
+*.log.*
+pytest.log
+
+# =============================================================================
+# ENVIRONMENT & CONFIG Files (Secrets)
+# =============================================================================
+.env
+.env.local
+.env.*.local
+.env.production.local
+.env.development.local
+.env.test.local
+.env.staging
+.env.production
+.env.docker
+config/secrets/
+secrets/
+credentials.json
+config.local.py
+local_settings.py
+settings_local.py
+*.pem
+*.key
+*.crt
+*.pfx
+*.p12
+
+# =============================================================================
+# DOCKER & DOCKER COMPOSE
+# =============================================================================
+docker-compose.override.yml
+.dockerignore
+docker_build/
+docker-compose.dev.yml
+.docker/
+
+# =============================================================================
+# Kubernetes & Container Orchestration
+# =============================================================================
+k8s/secrets/
+k8s/*.secret.yaml
+k8s/kustomization.yaml
+k8s/overlays/*/kustomization.yaml
+kubeconfig
+.kubeconfig
+kubeconfig.yaml
+helm-values-local.yaml
+*.helm.*
+
+# =============================================================================
+# TEMPORARY Files & Caches
+# =============================================================================
+tmp/
+temp/
+*.tmp
+*.bak
+*.backup
+*.cache
+.cache/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.#*
+
+# =============================================================================
+# IDE-Specific Files
+# =============================================================================
+
+# VSCode
+.vscode/
+*.code-workspace
+.history/
+
+# PyCharm/IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+.idea_modules/
+*.sublime-project
+*.sublime-workspace
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# Vim
+.vim/
+*.vim
+.vimrc
+.swp
+.swo
+
+# Nano
+.nano_history
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Visual Studio
+.vs/
+.vscode/
+
+# =============================================================================
+# OS-Specific Files
+# =============================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+*.swp
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+.Trash-*
+.directory
+
+# =============================================================================
+# Project-Specific
+# =============================================================================
+
+# Backend uploads/media
+uploads/
+media/
+static/
+public/
+
+# Frontend builds
+frontend/build/
+frontend/dist/
+frontend/.out/
+frontend/.next/
+
+# Application temp data
+tmp_data/
+cache/
+.cache/
+
+# Ingestion service logs
+ingestion_service/logs/
+ingestion_service/tmp/
+
+# Test reports
+htmlcov/
+coverage_report/
+test-results/
+
+# Build artifacts
+dist/
+build/
+*.tar.gz
+*.zip
+
+# Database backups
+*.sql
+*.sql.gz
+backups/
+db_backup/
+
+# =============================================================================
+# Sensitive & Credentials
+# =============================================================================
+credentials/
+secrets/
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
+*.jks
+api_keys.txt
+tokens.json
+service-account-key.json
+terraform.tfvars
+.aws/credentials
+.gcp/
+.azure/
+.env*
+!.env.example
+!.env.sample
+
+# =============================================================================
+# CI/CD & Automation
+# =============================================================================
+.github/workflows/secrets.yml
+.gitlab-ci.local.yml
+.circleci/config.local.yml
+terraform.tfstate
+terraform.tfstate.*
+.terraform/
+.terraform.lock.hcl
+ansible/inventory/local
+.ansible/vault_pass
+
+# =============================================================================
+# Package Managers
+# =============================================================================
+pip-log.txt
+pip-delete-this-directory.txt
+Pipfile.lock
+poetry.lock
+.lock
+
+# =============================================================================
+# Documentation Build Artifacts
+# =============================================================================
+docs/_build/
+docs/.doctrees/
+site/
+*.md.bak
+
+# =============================================================================
+# Jupyter Notebooks (if used for analysis)
+# =============================================================================
+.ipynb_checkpoints/
+*.ipynb
+*.nbconvert_checkpoint
+
+# =============================================================================
+# Pre-commit Framework
+# =============================================================================
+.pre-commit-config.yaml.local
+.pre-commit-autoupdate.log
+
+# =============================================================================
+# Local Development Overrides
+# =============================================================================
+*.local
+local_*
+.local/
+.vscode-settings.json
+launch.json
+
+# =============================================================================
+# Performance & Profiling
+# =============================================================================
+*.prof
+*.cProfile
+*.lprof
+profile_results/
+
+# =============================================================================
+# Development Assistants
+# =============================================================================
+.cursor/
+.copilot/
+.gpt-4/
+
+# =============================================================================
+# Node Modules (if any exist elsewhere)
+# =============================================================================
+node_modules/
+package-lock.json
+yarn.lock
+
+# =============================================================================
+# Redis & Cache Data
+# =============================================================================
+dump.rdb
+appendonly.aof
+*.aof
+
+# =============================================================================
+# Message Queues & Brokers
+# =============================================================================
+rabbitmq_data/
+kafka_data/
+celery_results/
+
+# =============================================================================
+# Monitoring & Observability
+# =============================================================================
+prometheus_data/
+grafana_storage/
+jaeger_data/
+elk_data/
+
+# =============================================================================
+# Development Tools Output
+# =============================================================================
+.env.vault
+.vault-token
+ansible/roles/requirements/
+terraform.plan
+tfplan
+tfplan.out
+
+# =============================================================================
+# Architecture & Diagrams (Exclude large binary files)
+# =============================================================================
+*.drawio.bak
+*.lucidchart~
+architecture_diagrams/
+*.pptx
+*.odp
+
+# =============================================================================
+# Bulk File Types to Ignore
+# =============================================================================
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.iso
+*.dmg
+*.exe
+*.msi
+*.bin
+
+# =============================================================================
+# GIT-Specific
+# =============================================================================
+.gitattributes
+.gitmodules
+
+# =============================================================================
+# ALLOW EXCEPTIONS
+# Keep important config examples and documentation
+# =============================================================================
+!.env.example
+!.env.sample
+!.env.template
+!.gitkeep
+!README.md
+!docker-compose.example.yml
+!docker-compose.template.yml
+!k8s/values.yaml
+!requirements.txt
+!package.json
+!tsconfig.json
+!.eslintrc.json
+!pytest.ini
+!setup.py
+!setup.cfg
+!pyproject.toml
+!Dockerfile
+!.dockerignore
+!.github/
