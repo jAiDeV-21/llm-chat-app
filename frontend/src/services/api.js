@@ -20,15 +20,24 @@ export const chatAPI = {
     return response.json();
   },
   
-  sendMessage: async (conversationId, message) => {
+  sendMessage: async (conversationId, message, sessionId) => {
     const response = await fetch(`${API_BASE}/chat/send-message`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         conversation_id: conversationId,
-        message: message
+        message: message,
+        session_id: sessionId
       })
     });
+    return response.json();
+  },
+
+  cancelConversation: async (conversationId) => {
+    const response = await fetch(
+      `${API_BASE}/conversations/${conversationId}/cancel`,
+      { method: "POST" }
+    );
     return response.json();
   }
 };

@@ -1,41 +1,113 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { chatAPI } from "../services/api";
+import MessageInput from "./MessageInput";
+import MessageList from "./MessageList";
+
+const generateSessionId = () => {
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+};
 
 export default function ChatWindow({ conversationId }) {
   const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loadingHistory, setLoadingHistory] = useState(false);
+  const [sending, setSending] = useState(false);
   const [sessionId] = useState(() => generateSessionId());
-  
+
+  useEffect(() => {
+    let active = true;
+    const loadMessages = async () => {
+      if (!conversationId) {
+        return;
+      }
+      setLoadingHistory(true);
+      try {
+        const response = await chatAPI.getMessages(conversationId);
+        if (!active) {
+          return;
+        }
+        const items = Array.isArray(response)
+          ? response
+          : Array.isArray(response?.messages)
+            ? response.messages
+            : [];
+        const normalized = items.map((item) => ({
+          role: item.role ?? item.sender ?? item.type ?? "assistant",
+          content: item.content ?? item.message ?? item.text ?? "",
+        }));
+        setMessages(normalized);
+      } catch (error) {
+        console.error("Error:", error);
+        if (active) {
+          setMessages([
+            { role: "system", content: "Unable to load messages." },
+          ]);
+        }
+      } finally {
+        if (active) {
+          setLoadingHistory(false);
+        }
+      }
+    };
+
+    setMessages([]);
+    loadMessages();
+    return () => {
+      active = false;
+    };
+  }, [conversationId]);
+
   const handleSendMessage = async (text) => {
-    setLoading(true);
-    
+    setSending(true);
+    setMessages((prev) => [...prev, { role: "user", content: text }]);
+
     try {
       const response = await chatAPI.sendMessage(
         conversationId,
         text,
         sessionId
       );
-      
-      setMessages(prev => [
-        ...prev,
-        { role: "user", content: text },
-        { role: "assistant", content: response.assistant_message }
-      ]);
+      const assistantMessage =
+        response?.assistant_message ??
+        response?.message ??
+        response?.assistant ??
+        "";
+      if (assistantMessage) {
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: assistantMessage },
+        ]);
+      }
     } catch (error) {
       console.error("Error:", error);
+      setMessages((prev) => [
+        ...prev,
+        { role: "system", content: "Failed to send the message." },
+      ]);
     } finally {
-      setLoading(false);
+      setSending(false);
     }
   };
   
   const handleCancel = async () => {
-    await chatAPI.cancelConversation(conversationId);
-    setMessages([]);
+    try {
+      await chatAPI.cancelConversation(conversationId);
+      setMessages([]);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
   
   const handleStream = async (text) => {
-    setLoading(true);
+    setSending(true);
+    setMessages((prev) => [
+      ...prev,
+      { role: "user", content: text },
+      { role: "assistant", content: "" },
+    ]);
     
     const eventSource = new EventSource(
       `/api/chat/send-message-stream?conversation_id=${conversationId}&session_id=${sessionId}`
@@ -52,6 +124,8 @@ export default function ChatWindow({ conversationId }) {
         const lastMessage = newMessages[newMessages.length - 1];
         if (lastMessage?.role === "assistant") {
           lastMessage.content = fullResponse;
+        } else {
+          newMessages.push({ role: "assistant", content: fullResponse });
         }
         return newMessages;
       });
@@ -59,7 +133,7 @@ export default function ChatWindow({ conversationId }) {
     
     eventSource.onerror = () => {
       eventSource.close();
-      setLoading(false);
+      setSending(false);
     };
   };
   
@@ -68,7 +142,8 @@ export default function ChatWindow({ conversationId }) {
       <div className="actions">
         <button onClick={handleCancel}>Cancel Conversation</button>
       </div>
-      {/* Rest of component */}
+      <MessageList messages={messages} loading={loadingHistory} />
+      <MessageInput onSend={handleSendMessage} disabled={sending} />
     </div>
   );
 }
