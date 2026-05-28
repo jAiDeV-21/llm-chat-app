@@ -265,7 +265,10 @@
 
 .actions {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 .message-list {
@@ -347,4 +350,25 @@
 .message-input button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.provider-selector {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.provider-selector label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-h);
+}
+
+.provider-selector select {
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-h);
 }

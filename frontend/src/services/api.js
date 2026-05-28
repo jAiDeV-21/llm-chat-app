@@ -20,16 +20,29 @@ export const chatAPI = {
     return response.json();
   },
   
-  sendMessage: async (conversationId, message, sessionId) => {
+  sendMessage: async (conversationId, message, sessionId, provider, model) => {
+    const payload = {
+      conversation_id: conversationId,
+      message: message,
+      session_id: sessionId
+    };
+    if (provider) {
+      payload.provider = provider;
+    }
+    if (model) {
+      payload.model = model;
+    }
+
     const response = await fetch(`${API_BASE}/chat/send-message`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        conversation_id: conversationId,
-        message: message,
-        session_id: sessionId
-      })
+      body: JSON.stringify(payload)
     });
+    return response.json();
+  },
+
+  getAvailableProviders: async () => {
+    const response = await fetch(`${API_BASE}/available-providers`);
     return response.json();
   },
 

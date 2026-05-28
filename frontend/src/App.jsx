@@ -14,8 +14,8 @@ function App() {
   }, []);
   
   const loadConversations = async () => {
-    const convos = await chatAPI.listConversations();
-    //const convos = [{ id: 1, name: "Conversation 1" }];
+    //const convos = await chatAPI.listConversations();
+    const convos = [{ id: 1, name: "Conversation 1" }];
     setConversations(convos);
     if (convos.length > 0) {
       setActiveConversation((prev) => prev ?? convos[0].id);

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { chatAPI } from "../services/api";
 import MessageInput from "./MessageInput";
 import MessageList from "./MessageList";
+import ProviderSelector from "./ProviderSelector";
 
 const generateSessionId = () => {
   if (typeof crypto !== "undefined" && crypto.randomUUID) {
@@ -16,6 +17,8 @@ export default function ChatWindow({ conversationId }) {
   const [loadingHistory, setLoadingHistory] = useState(false);
   const [sending, setSending] = useState(false);
   const [sessionId] = useState(() => generateSessionId());
+  const [provider, setProvider] = useState("");
+  const [model, setModel] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -68,7 +71,9 @@ export default function ChatWindow({ conversationId }) {
       const response = await chatAPI.sendMessage(
         conversationId,
         text,
-        sessionId
+        sessionId,
+        provider,
+        model
       );
       const assistantMessage =
         response?.assistant_message ??
@@ -109,8 +114,19 @@ export default function ChatWindow({ conversationId }) {
       { role: "assistant", content: "" },
     ]);
     
+    const params = new URLSearchParams({
+      conversation_id: conversationId,
+      session_id: sessionId,
+    });
+    if (provider) {
+      params.set("provider", provider);
+    }
+    if (model) {
+      params.set("model", model);
+    }
+
     const eventSource = new EventSource(
-      `/api/chat/send-message-stream?conversation_id=${conversationId}&session_id=${sessionId}`
+      `/api/chat/send-message-stream?${params.toString()}`
     );
     
     let fullResponse = "";
@@ -140,6 +156,12 @@ export default function ChatWindow({ conversationId }) {
   return (
     <div className="chat-window">
       <div className="actions">
+        <ProviderSelector
+          onProviderChange={(nextProvider, nextModel) => {
+            setProvider(nextProvider);
+            setModel(nextModel);
+          }}
+        />
         <button onClick={handleCancel}>Cancel Conversation</button>
       </div>
       <MessageList messages={messages} loading={loadingHistory} />

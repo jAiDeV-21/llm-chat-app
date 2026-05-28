@@ -3,7 +3,7 @@ import { chatAPI } from "../services/api";
 
 export default function ProviderSelector({ onProviderChange }) {
   const [providers, setProviders] = useState({});
-  const [selectedProvider, setSelectedProvider] = useState("anthropic");
+  const [selectedProvider, setSelectedProvider] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
   
   useEffect(() => {
@@ -11,12 +11,23 @@ export default function ProviderSelector({ onProviderChange }) {
   }, []);
   
   const loadProviders = async () => {
-    const data = await chatAPI.getAvailableProviders();
-    setProviders(data);
-    
-    // Set default model
-    if (data.anthropic?.length > 0) {
-      setSelectedModel(data.anthropic[0]);
+    try {
+      const data = await chatAPI.getAvailableProviders();
+      const safeData = data && typeof data === "object" ? data : {};
+      setProviders(safeData);
+
+      const providerKeys = Object.keys(safeData);
+      const defaultProvider = providerKeys[0] || "";
+      const models = safeData[defaultProvider] || [];
+      const defaultModel = models[0] || "";
+
+      setSelectedProvider(defaultProvider);
+      setSelectedModel(defaultModel);
+      if (defaultProvider && defaultModel) {
+        onProviderChange?.(defaultProvider, defaultModel);
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
   
@@ -26,17 +37,16 @@ export default function ProviderSelector({ onProviderChange }) {
     
     // Auto-select first model of new provider
     const models = providers[newProvider] || [];
-    if (models.length > 0) {
-      setSelectedModel(models[0]);
-    }
+    const nextModel = models[0] || "";
+    setSelectedModel(nextModel);
     
-    onProviderChange(newProvider, selectedModel);
+    onProviderChange?.(newProvider, nextModel);
   };
   
   const handleModelChange = (e) => {
     const newModel = e.target.value;
     setSelectedModel(newModel);
-    onProviderChange(selectedProvider, newModel);
+    onProviderChange?.(selectedProvider, newModel);
   };
   
   return (
