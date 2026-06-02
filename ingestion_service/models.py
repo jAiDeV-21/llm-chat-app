@@ -1,9 +1,15 @@
 
 import os
 from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Protocol
 
 from pydantic import BaseModel
+
+try:
+    from dotenv import load_dotenv
+except ModuleNotFoundError:
+    load_dotenv = None
 
 try:
     from sqlalchemy import Column, DateTime, Float, Integer, JSON, String, Text, create_engine
@@ -11,6 +17,11 @@ try:
 except ModuleNotFoundError:
     Column = DateTime = Float = Integer = JSON = String = Text = create_engine = None
     declarative_base = sessionmaker = None
+
+
+if load_dotenv:
+    project_root = Path(__file__).resolve().parents[1]
+    load_dotenv(project_root / ".env")
 
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./ingestion_logs.db")
