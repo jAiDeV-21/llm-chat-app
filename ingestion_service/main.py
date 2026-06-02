@@ -45,11 +45,7 @@ async def ingest_logs(payload: IngestPayload, log_store: LogStore = Depends(get_
         logs_to_store = []
         for log_data in payload.logs:
             # 1. Parse and validate
-            log_dict = (
-                log_data.model_dump()
-                if hasattr(log_data, "model_dump")
-                else log_data.dict()
-            )
+            log_dict = log_data.model_dump()  # Convert Pydantic model to dict for processing
 
             # 2. Extract metadata
             extracted_metadata = extract_metadata(log_dict)
