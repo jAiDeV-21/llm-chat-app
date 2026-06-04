@@ -3,12 +3,10 @@ from http.client import HTTPResponse
 
 from fastapi import Depends, FastAPI, HTTPException
 
+from db.log_store import LogStore, create_log_store
+from db.supabase_client import close_db, init_db
 from models import (
     InferenceLogModel,
-    LogStore,
-    close_db,
-    create_log_store,
-    init_db,
 )
 from schemas.logs import IngestPayload
 from services.extraction import extract_metadata
