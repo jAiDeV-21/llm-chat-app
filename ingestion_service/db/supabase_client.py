@@ -1,11 +1,4 @@
-import os
-from pathlib import Path
 from typing import Optional
-
-try:
-    from dotenv import load_dotenv
-except ModuleNotFoundError:
-    load_dotenv = None
 
 try:
     from supabase import Client, create_client
@@ -13,30 +6,24 @@ except ModuleNotFoundError:
     Client = None
     create_client = None
 
-
-if load_dotenv:
-    project_root = Path(__file__).resolve().parents[2]
-    load_dotenv(project_root / ".env")
+from core.config import settings
 
 
-SUPABASE_URL = os.environ.get("SUPABASE_URL")
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
-SUPABASE_TABLE = os.environ.get("SUPABASE_TABLE", "inference_logs")
 supabase_client: Optional[Client] = None
 
 
 def create_supabase_client() -> Optional[Client]:
     """Change this function if you move away from Supabase later."""
-    if not SUPABASE_URL and not SUPABASE_KEY:
+    if not settings.supabase_url and not settings.supabase_key:
         return None
 
-    if not SUPABASE_URL or not SUPABASE_KEY:
+    if not settings.supabase_url or not settings.supabase_key:
         raise ValueError("Both SUPABASE_URL and SUPABASE_KEY must be set")
 
     if not create_client:
         raise RuntimeError("Install the supabase package to use Supabase storage")
 
-    return create_client(SUPABASE_URL, SUPABASE_KEY)
+    return create_client(settings.supabase_url, settings.supabase_key)
 
 
 def init_db() -> None:
@@ -54,4 +41,4 @@ def get_supabase_client() -> Optional[Client]:
 
 
 def get_supabase_table() -> str:
-    return SUPABASE_TABLE
+    return settings.supabase_table
